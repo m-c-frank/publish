@@ -35,9 +35,9 @@ jobs:
         run: ./deploybin
 
       - name: Deploy to GitHub Pages
-        - uses: actions/checkout@v3
-            with:
-              token: ${{ secrets.GH_PAT }}
+        uses: actions/checkout@v3
+          with:
+            token: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
