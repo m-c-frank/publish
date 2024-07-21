@@ -33,11 +33,16 @@ jobs:
       - name: Run binary
         run: ./deploybin
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git checkout --orphan gh-pages
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git clone --depth=1 --branch=gh-pages https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} gh-pages
+          cd gh-pages
           git rm -rf .
-          cp -r output/* .
+          cp -r ../output/* .
           git add .
           git commit -m "Deploy"
-          git push -f origin gh-pages
+          git push origin gh-pages --force
