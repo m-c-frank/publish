@@ -44,7 +44,7 @@ jobs:
         run: |
           git checkout --orphan gh-pages
           git rm -rf .
-          cp -r output/* .
-          git add *.html
+          mv output/* .
+          git add *.html notes/*.html
           git commit -m "Deploy"
           git push -f https://x-access-token:${{ secrets.GH_PAT }}@github.com/m-c-frank/publish.git gh-pages
