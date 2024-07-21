@@ -34,7 +34,8 @@ jobs:
 
   deploy:
     needs: build
-
+    runs-on: ubuntu-latest
+    steps:
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
