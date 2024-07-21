@@ -1,35 +1,43 @@
-
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Change this to your default branch if it's not 'main'
+      - main
 
+# first need to build the rust binary in ./deploy directory
+# then copy the binary to the root directory
+# then run the binary
+# then deploy the output to github pages
+# this via gh-pages branch -D and orphan and then just copy the output to the root directory
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-        run:
-          working-directory: ./markdown-to-html
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-    - name: Install dependencies
-      run: npm install
+      - name: Build
+        run: cargo build
+        working-directory: ./deploy
 
-    - name: Build the project
-      run: node convert.js
+      - name: Copy binary
+        run: cp ./target/debug/deploy ../deploybin
+        working-directory: ./deploy
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./output # Adjust this to the directory you want to publish
+      - name: Run binary
+        run: ./deploybin
+
+      - name: Deploy
+        run: |
+          git checkout --orphan gh-pages
+          git rm -rf .
+          cp -r website/* .
+          git add .
+          git commit -m "Deploy"
+          git push -f origin gh-pages

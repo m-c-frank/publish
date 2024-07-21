@@ -4,7 +4,7 @@ use tokio::fs::{self, read_to_string, write};
 use serde_yaml::Value;
 use pulldown_cmark::{Parser, Options, html};
 
-const PATH_NOTES: &str = "/home/mcfrank/publish/notes";
+const PATH_NOTES: &str = "notes";
 const PATH_OUTPUT: &str = "output";
 
 async fn convert_markdown_to_html(markdown: &str) -> String {
