@@ -35,16 +35,15 @@ jobs:
         run: ./deploybin
 
       - name: Deploy to GitHub Pages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        - uses: actions/checkout@v3
+            with:
+              token: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan gh-pages
           git rm -rf .
           cp -r output/* .
-          echo "Directory contents after copying output:"
-          ls -la
-          git add -A
+          git add *.html
           git commit -m "Deploy"
-          git push -f https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} gh-pages
+          git push -f origin gh-pages
