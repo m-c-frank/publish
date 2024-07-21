@@ -13,6 +13,7 @@ on:
 # this via gh-pages branch -D and orphan and then just copy the output to the root directory
 jobs:
   build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
