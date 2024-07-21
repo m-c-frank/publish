@@ -5,7 +5,7 @@ use serde_yaml::Value;
 use pulldown_cmark::{Parser, Options, html};
 
 const PATH_NOTES: &str = "notes";
-const PATH_OUTPUT: &str = "output";
+const PATH_OUTPUT: &str = "output/notes";
 
 async fn convert_markdown_to_html(markdown: &str) -> String {
     let parser = Parser::new_ext(markdown, Options::empty());
