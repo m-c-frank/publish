@@ -35,8 +35,8 @@ jobs:
         run: ./deploybin
 
       - name: Deploy to GitHub Pages
-        with:
-          token: ${{ secrets.GH_PAT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
