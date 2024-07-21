@@ -39,6 +39,8 @@ jobs:
           git config --global user.name "Your Name"     
 
       - name: Deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git checkout --orphan gh-pages
           git rm -rf .
