@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 # first need to build the rust binary in ./deploy directory
 # then copy the binary to the root directory
