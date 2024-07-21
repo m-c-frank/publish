@@ -5,7 +5,9 @@ use serde_yaml::Value;
 use pulldown_cmark::{Parser, Options, html};
 
 const PATH_NOTES: &str = "notes";
-const PATH_OUTPUT: &str = "output/notes";
+const PATH_NOTES_OUTPUT: &str = "output/notes";
+
+const PATH_OUTPUT: &str = "output";
 
 async fn convert_markdown_to_html(markdown: &str) -> String {
     let parser = Parser::new_ext(markdown, Options::empty());
@@ -14,9 +16,9 @@ async fn convert_markdown_to_html(markdown: &str) -> String {
     html_output
 }
 
-async fn make_index_page() -> Result<(), Box<dyn std::error::Error>> {
+async fn make_note_index_page() -> Result<(), Box<dyn std::error::Error>> {
     let notes_dir = Path::new(PATH_NOTES);
-    let output_dir = Path::new(PATH_OUTPUT);
+    let output_dir = Path::new(PATH_NOTES_OUTPUT);
     let output_file = output_dir.join("index.html");
 
     create_dir_all(&output_dir)?;
@@ -71,6 +73,20 @@ fn parse_front_matter(content: &str) -> Result<(Value, String), Box<dyn std::err
     Ok((matter, parts[2].to_string()))
 }
 
+async fn make_index_page() -> Result<(), Box<dyn std::error::Error>> {
+    let output_dir = Path::new(PATH_OUTPUT);
+    let output_file = output_dir.join("index.html");
+
+    create_dir_all(&output_dir)?;
+
+    let html_content = "<!DOCTYPE html><html><head><title>Home</title><link rel=\"stylesheet\" href=\"styles.css\"></head><body><h1>Home</h1><a href=\"notes/index.html\">Notes</a></body></html>";
+
+    write(&output_file, html_content).await?;
+
+    make_note_index_page().await?;
+
+    Ok(())
+}
 #[tokio::main]
 async fn main() {
     if let Err(e) = make_index_page().await {
